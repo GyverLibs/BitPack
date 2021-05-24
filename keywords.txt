@@ -1,0 +1,23 @@
+#######################################
+# Syntax Coloring Map For BitPack
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+BitPack	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+set	KEYWORD2
+clear	KEYWORD2
+toggle	KEYWORD2
+write	KEYWORD2
+read	KEYWORD2
+setAll	KEYWORD2
+clearAll	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
