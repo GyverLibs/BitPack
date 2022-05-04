@@ -3,8 +3,7 @@ This is an automatic translation, may be incorrect in some places. See sources a
 #bitpack
 Library for packing bit flags into a byte array (saving space) for Arduino
 
-### Compatibility
-Compatible with all Arduino platforms (using Arduino functions)
+### CompatibilityCompatible with all Arduino platforms (using Arduino functions)
 
 ## Content
 - [Install](#install)
@@ -12,9 +11,7 @@ Compatible with all Arduino platforms (using Arduino functions)
 - [Usage](#usage)
 - [Example](#example)
 - [Versions](#versions)
-- [Bugs and feedback](#feedback)
-
-<a id="install"></a>
+- [Bugs and feedback](#feedback)<a id="install"></a>
 ## Installation
 - The library can be found by the name **BitPack** and installed through the library manager in:
     - Arduino IDE
@@ -23,8 +20,7 @@ Compatible with all Arduino platforms (using Arduino functions)
 - [Download library](https://github.com/GyverLibs/BitPack/archive/refs/heads/main.zip) .zip archive for manual installation:
     - Unzip and put in *C:\Program Files (x86)\Arduino\libraries* (Windows x64)
     - Unzip and put in *C:\Program Files\Arduino\libraries* (Windows x32)
-    - Unpack and put in *Documents/Arduino/libraries/*
-    - (Arduino IDE) automatic installation from .zip: *Sketch/Include library/Add .ZIP library…* and specify the downloaded archive
+    - Unpack and put in *Documents/Arduino/libraries/*- (Arduino IDE) automatic installation from .zip: *Sketch/Include library/Add .ZIP library…* and specify the downloaded archive
 - Read more detailed instructions for installing libraries [here] (https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE% D0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
 
 <a id="init"></a>
@@ -32,19 +28,16 @@ Compatible with all Arduino platforms (using Arduino functions)
 ```cpp
 // specify the number of flags
 BitPack<10> flags;
-```
-
-<a id="usage"></a>
+```<a id="usage"></a>
 ## Usage
 ```cpp
 
-void set(uint8_tnum);// install
+void set(uint8_tnum); // install
 void clear(uint8_t num); // reset
 void toggle(uint8_t num); // toggle
 void write(uint8_t num, bool state); // write
 bool read(uint8_t num); // read
-void setAll(); // install all
-void clearAll(); // reset everything
+void setAll(); // install allvoid clearAll(); // reset everything
 ```
 
 <a id="example"></a>
@@ -53,8 +46,7 @@ See **examples** for other examples!
 ```cpp
 #include "BitPack.h"
 
-// specify the number of flags
-BitPack<10> flags;
+// specify the number of flagsBitPack<10> flags;
 
 void setup() {
   Serial.begin(9600);
@@ -63,8 +55,7 @@ void setup() {
   flags set(3);
   flags.write(3, 1);
   Serial.println(flags.read(0)); // read the flag
-  Serial.println(flags.read(1));
-  Serial.println(flags.read(2));
+  Serial.println(flags.read(1));Serial.println(flags.read(2));
   flags[3] = 0; // can be written via []
   Serial.println(flags[3]); // can be read via []
 }
@@ -73,8 +64,7 @@ void loop() {
 }
 ```
 
-<a id="versions"></a>
-## Versions
+<a id="versions"></a>## Versions
 - v1.0
 
 <a id="feedback"></a>
