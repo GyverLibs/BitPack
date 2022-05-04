@@ -1,3 +1,5 @@
+This is an automatic translation, may be incorrect in some places. See sources and examples!
+
 #bitpack
 Library for packing bit flags into a byte array (saving space) for Arduino
 
