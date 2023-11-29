@@ -5,11 +5,15 @@
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
+
 BitPack	KEYWORD1
+BitPackExt	KEYWORD1
+BitPackDyn	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+
 set	KEYWORD2
 clear	KEYWORD2
 toggle	KEYWORD2
@@ -17,7 +21,19 @@ write	KEYWORD2
 read	KEYWORD2
 setAll	KEYWORD2
 clearAll	KEYWORD2
+size	KEYWORD2
+amount	KEYWORD2
+
+BP_BYTE	KEYWORD2
+BP_BIT	KEYWORD2
+BP_SET	KEYWORD2
+BP_CLEAR	KEYWORD2
+BP_READ	KEYWORD2
+BP_TOGGLE	KEYWORD2
+BP_WRITE	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+BP_NO_ARRAY	LITERAL1

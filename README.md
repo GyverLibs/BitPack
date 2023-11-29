@@ -12,12 +12,86 @@
 Совместима со всеми Arduino платформами (используются Arduino-функции)
 
 ## Содержание
-- [Установка](#install)
 - [Инициализация](#init)
 - [Использование](#usage)
 - [Пример](#example)
 - [Версии](#versions)
+- [Установка](#install)
 - [Баги и обратная связь](#feedback)
+
+<a id="init"></a>
+## Инициализация
+
+```cpp
+// указываем количество флагов
+BitPack<10> pack;     // static буфер внутри
+BitPackDyn pack(10);  // динамическое выделение
+
+uint8_t buf[2]; // 1 байт - 8 флагов
+BitPackExt pack(buf, 10);  // 10 флагов
+```
+
+<a id="usage"></a>
+## Использование
+
+```cpp
+// методы
+void set(uint8_t num);                  // установить
+void clear(uint8_t num);                // сбросить
+void toggle(uint8_t num);               // переключить
+void write(uint8_t num, bool state);    // записать
+bool read(uint8_t num);                 // прочитать
+void setAll();                          // установить все
+void clearAll();                        // сбросить все
+uint16_t amount();                      // количество флагов
+uint16_t size();                        // размер pack в байтах
+
+uint8_t* pack;                          // доступ к буферу
+
+// макросы
+BP_SET(pack, idx)
+BP_CLEAR(pack, idx)
+BP_READ(pack, idx)
+BP_TOGGLE(pack, idx)
+BP_WRITE(pack, idx)
+
+// настройки (до подключения библиотеки)
+#define BP_NO_ARRAY   // убрать доступ через [] - экономит 2 байта RAM
+```
+
+<a id="example"></a>
+## Пример
+Остальные примеры смотри в **examples**!
+
+```cpp
+#include "BitPack.h"
+
+// указываем количество флагов
+BitPack<10> flags;
+
+void setup() {
+  Serial.begin(9600);
+  flags.clearAll(); // опустить все
+  flags.set(1);     // поднять флаг
+  flags.set(3);
+  flags.write(3, 1);
+  Serial.println(flags.read(0));  // прочитать флаг
+  Serial.println(flags.read(1));
+  Serial.println(flags.read(2));
+
+  flags[3] = 0;				      // можно писать через []
+  Serial.println(flags[3]); // можно читать через []
+}
+
+void loop() {
+}
+```
+
+<a id="versions"></a>
+
+## Версии
+- v1.0
+- v1.1 - пофикшен доступ через [], добавлены новые инструменты
 
 <a id="install"></a>
 ## Установка
@@ -36,62 +110,10 @@
 - Через менеджер библиотек IDE: найти библиотеку как при установке и нажать "Обновить"
 - Вручную: **удалить папку со старой версией**, а затем положить на её место новую. "Замену" делать нельзя: иногда в новых версиях удаляются файлы, которые останутся при замене и могут привести к ошибкам!
 
-
-<a id="init"></a>
-## Инициализация
-```cpp
-// указываем количество флагов
-BitPack<10> flags;
-```
-
-<a id="usage"></a>
-## Использование
-```cpp
-
-void set(uint8_t num);                  // установить
-void clear(uint8_t num);                // сбросить
-void toggle(uint8_t num);               // переключить
-void write(uint8_t num, bool state);    // записать
-bool read(uint8_t num);                 // прочитать
-void setAll();                          // установить все
-void clearAll();                        // сбросить все
-```
-
-<a id="example"></a>
-## Пример
-Остальные примеры смотри в **examples**!
-```cpp
-#include "BitPack.h"
-
-// указываем количество флагов
-BitPack<10> flags;
-
-void setup() {
-  Serial.begin(9600);
-  flags.clearAll(); // опустить все
-  flags.set(1);     // поднять флаг
-  flags.set(3);
-  flags.write(3, 1);
-  Serial.println(flags.read(0));  // прочитать флаг
-  Serial.println(flags.read(1));
-  Serial.println(flags.read(2));
-  flags[3] = 0;				// можно писать через []
-  Serial.println(flags[3]); // можно читать через []
-}
-
-void loop() {
-}
-```
-
-<a id="versions"></a>
-## Версии
-- v1.0
-
 <a id="feedback"></a>
 ## Баги и обратная связь
 При нахождении багов создавайте **Issue**, а лучше сразу пишите на почту [alex@alexgyver.ru](mailto:alex@alexgyver.ru)  
 Библиотека открыта для доработки и ваших **Pull Request**'ов!
-
 
 При сообщении о багах или некорректной работе библиотеки нужно обязательно указывать:
 - Версия библиотеки
