@@ -43,6 +43,9 @@ void write(uint8_t num, bool state);    // записать
 bool read(uint8_t num);                 // прочитать
 void setAll();                          // установить все
 void clearAll();                        // сбросить все
+bool copyTo(любой пак);                 // копировать в    
+bool copyFrom(любой пак);               // копировать из
+
 uint16_t amount();                      // количество флагов
 uint16_t size();                        // размер pack в байтах
 
@@ -57,6 +60,24 @@ BP_WRITE(pack, idx)
 
 // настройки (до подключения библиотеки)
 #define BP_NO_ARRAY   // убрать доступ через [] - экономит 2 байта RAM
+```
+
+### Доступ через []
+В библиотеке реализован удобный доступ к битам через образение как к массиву `[]`. Этот способ *чуть медленнее* использования функций set/read/write!
+```cpp
+BitPack<10> flags;
+flags[0] = 1;
+Serial.println(flags[0]);
+bool f = flags[0];
+
+BitPack<10> flags2;
+flags[0] = flags2[0];
+
+// примечание:
+// такое приравнивание некорректно! Используй copyTo/copyFrom
+flags = flags2;
+
+flags.copyTo(flags2);     // копировать весь пакет
 ```
 
 <a id="example"></a>
@@ -81,6 +102,10 @@ void setup() {
 
   flags[3] = 0;				      // можно писать через []
   Serial.println(flags[3]); // можно читать через []
+
+  BitPack<10> flags2;
+  flags[0] = flags2[1];     // копировать бит
+  flags.copyTo(flags2);     // копировать весь пакет
 }
 
 void loop() {
@@ -93,6 +118,7 @@ void loop() {
 - v1.0
 - v1.1 - пофикшен доступ через [], добавлены новые инструменты
 - v1.1.1 - перезалив
+- v1.2 - добавлены copy методы, упрощён доступ через массив
 
 <a id="install"></a>
 ## Установка

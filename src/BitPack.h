@@ -20,10 +20,10 @@
 #define BP_WRITE(pack, idx, val) (val) ? BP_SET(pack, idx) : BP_CLEAR(pack, idx)
 
 // ============== STATIC PACK ==============
-template <uint16_t AMOUNT>
+template <uint16_t flag_amount>
 class BitPack {
    public:
-    uint8_t pack[(AMOUNT + 8 - 1) >> 3];  // round up
+    uint8_t pack[(flag_amount + 8 - 1) >> 3];  // round up
 
     BitPack() {
         clearAll();
@@ -31,37 +31,37 @@ class BitPack {
 
     // размер pack в байтах
     uint16_t size() {
-        return (AMOUNT + 8 - 1) >> 3;
+        return (flag_amount + 8 - 1) >> 3;
     }
 
     // количество флагов
     uint16_t amount() {
-        return AMOUNT;
+        return flag_amount;
     }
 
     // установить
     void set(uint16_t idx) {
-        if (idx < AMOUNT) BP_SET(pack, idx);
+        if (idx < flag_amount) BP_SET(pack, idx);
     }
 
     // снять
     void clear(uint16_t idx) {
-        if (idx < AMOUNT) BP_CLEAR(pack, idx);
+        if (idx < flag_amount) BP_CLEAR(pack, idx);
     }
 
     // инвертировать
     void toggle(uint16_t idx) {
-        if (idx < AMOUNT) BP_TOGGLE(pack, idx);
+        if (idx < flag_amount) BP_TOGGLE(pack, idx);
     }
 
     // записать
     void write(uint16_t idx, bool state) {
-        if (idx < AMOUNT) BP_WRITE(pack, idx, state);
+        if (idx < flag_amount) BP_WRITE(pack, idx, state);
     }
 
     // прочитать
     bool read(uint16_t idx) {
-        if (idx < AMOUNT) return BP_READ(pack, idx);
+        if (idx < flag_amount) return BP_READ(pack, idx);
         else return 0;
     }
 
@@ -75,6 +75,20 @@ class BitPack {
         memset(pack, 0, size());
     }
 
+    // копировать в
+    bool copyTo(BitPack& bp) {
+        if (amount() != bp.amount()) return 0;
+        memcpy(bp.pack, pack, size());
+        return 1;
+    }
+
+    // копировать из
+    bool copyFrom(BitPack& bp) {
+        if (amount() != bp.amount()) return 0;
+        memcpy(pack, bp.pack, size());
+        return 1;
+    }
+
 #ifndef BP_NO_ARRAY
     BitPack& operator[](uint16_t idx) {
         _idx = idx;
@@ -85,6 +99,9 @@ class BitPack {
     }
     operator bool() {
         return read(_idx);
+    }
+    void operator=(BitPack& bp) {
+        write(_idx, (bool)bp);
     }
 #endif
 
@@ -150,6 +167,20 @@ class BitPackExt {
         memset(pack, 0, size());
     }
 
+    // копировать в
+    bool copyTo(BitPackExt& bp) {
+        if (amount() != bp.amount()) return 0;
+        memcpy(bp.pack, pack, size());
+        return 1;
+    }
+
+    // копировать из
+    bool copyFrom(BitPackExt& bp) {
+        if (amount() != bp.amount()) return 0;
+        memcpy(pack, bp.pack, size());
+        return 1;
+    }
+
 #ifndef BP_NO_ARRAY
     BitPackExt& operator[](uint16_t idx) {
         _idx = idx;
@@ -160,6 +191,9 @@ class BitPackExt {
     }
     operator bool() {
         return read(_idx);
+    }
+    void operator=(BitPackExt& bp) {
+        write(_idx, (bool)bp);
     }
 #endif
 
