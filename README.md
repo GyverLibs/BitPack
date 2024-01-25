@@ -36,11 +36,11 @@ BitPackExt pack(buf, 10);  // 10 флагов
 
 ```cpp
 // методы
-void set(uint8_t num);                  // установить
-void clear(uint8_t num);                // сбросить
-void toggle(uint8_t num);               // переключить
-void write(uint8_t num, bool state);    // записать
-bool read(uint8_t num);                 // прочитать
+void set(uint16_t num);                  // установить
+void clear(uint16_t num);                // сбросить
+void toggle(uint16_t num);               // переключить
+void write(uint16_t num, bool state);    // записать
+bool read(uint16_t num);                 // прочитать
 void setAll();                          // установить все
 void clearAll();                        // сбросить все
 bool copyTo(любой пак);                 // копировать в    
