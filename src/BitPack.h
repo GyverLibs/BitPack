@@ -114,10 +114,19 @@ class BitPack {
 // ============== EXTERNAL BUFFER ==============
 class BitPackExt {
    public:
-    uint8_t* pack;
+    uint8_t* pack = nullptr;
+
+    BitPackExt() {}
 
     // передать буфер и его размер в количестве флагов (8 флагов - 1 байт)
-    BitPackExt(uint8_t* pack, uint16_t amount, bool clear = true) : pack(pack), _amount(amount) {
+    BitPackExt(uint8_t* pack, uint16_t amount, bool clear = true) {
+        setBuffer(pack, amount, clear);
+    }
+
+    // передать буфер и его размер в количестве флагов (8 флагов - 1 байт)
+    void setBuffer(uint8_t* pack, uint16_t amount, bool clear = true) {
+        this->pack = pack;
+        this->_amount = amount;
         if (clear) clearAll();
     }
 
@@ -133,50 +142,50 @@ class BitPackExt {
 
     // установить
     void set(uint16_t idx) {
-        if (idx < _amount) BP_SET(pack, idx);
+        if (pack && idx < _amount) BP_SET(pack, idx);
     }
 
     // снять
     void clear(uint16_t idx) {
-        if (idx < _amount) BP_CLEAR(pack, idx);
+        if (pack && idx < _amount) BP_CLEAR(pack, idx);
     }
 
     // инвертировать
     void toggle(uint16_t idx) {
-        if (idx < _amount) BP_TOGGLE(pack, idx);
+        if (pack && idx < _amount) BP_TOGGLE(pack, idx);
     }
 
     // записать
     void write(uint16_t idx, bool state) {
-        if (idx < _amount) BP_WRITE(pack, idx, state);
+        if (pack && idx < _amount) BP_WRITE(pack, idx, state);
     }
 
     // прочитать
     bool read(uint16_t idx) {
-        if (idx < _amount) return BP_READ(pack, idx);
+        if (pack && idx < _amount) return BP_READ(pack, idx);
         else return 0;
     }
 
     // установить все
     void setAll() {
-        memset(pack, 255, size());
+        if (pack) memset(pack, 255, size());
     }
 
     // очистить все
     void clearAll() {
-        memset(pack, 0, size());
+        if (pack) memset(pack, 0, size());
     }
 
     // копировать в
     bool copyTo(BitPackExt& bp) {
-        if (amount() != bp.amount()) return 0;
+        if (!pack || amount() != bp.amount()) return 0;
         memcpy(bp.pack, pack, size());
         return 1;
     }
 
     // копировать из
     bool copyFrom(BitPackExt& bp) {
-        if (amount() != bp.amount()) return 0;
+        if (!pack || amount() != bp.amount()) return 0;
         memcpy(pack, bp.pack, size());
         return 1;
     }
@@ -209,14 +218,24 @@ class BitPackExt {
 // ============== DYNAMIC BUFFER ==============
 class BitPackDyn : public BitPackExt {
    public:
+    BitPackDyn() {}
+
     // указать количество флагов
-    BitPackDyn(uint16_t amount) : BitPackExt(nullptr, amount) {
-        pack = (uint8_t*)malloc(size());
-        if (!pack) this->_amount = 0;
+    BitPackDyn(uint16_t amount) {
+        init(amount);
+    }
+
+    // указать количество флагов
+    void init(uint16_t amount) {
+        if (pack) delete[] pack;
+        _amount = amount;
+        pack = new uint8_t[size()];
+        if (!pack) _amount = 0;
+        clearAll();
     }
 
     ~BitPackDyn() {
-        if (pack) free(pack);
+        if (pack) delete[] pack;
     }
 
    private:
