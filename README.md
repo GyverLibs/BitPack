@@ -1,6 +1,5 @@
 [![latest](https://img.shields.io/github/v/release/GyverLibs/BitPack.svg?color=brightgreen)](https://github.com/GyverLibs/BitPack/releases/latest/download/BitPack.zip)
 [![PIO](https://badges.registry.platformio.org/packages/gyverlibs/library/BitPack.svg)](https://registry.platformio.org/libraries/gyverlibs/BitPack)
-[![arduino-library](https://www.ardu-badge.com/badge/BitPack.svg?)](https://www.ardu-badge.com/BitPack)
 [![PIO](https://badges.registry.platformio.org/packages/gyverlibs/library/BitPack.svg)](https://registry.platformio.org/libraries/gyverlibs/BitPack)
 [![arduino-library](https://www.ardu-badge.com/badge/BitPack.svg?)](https://www.ardu-badge.com/BitPack)
 [![Foo](https://img.shields.io/badge/Website-AlexGyver.ru-blue.svg?style=flat-square)](https://alexgyver.ru/)
