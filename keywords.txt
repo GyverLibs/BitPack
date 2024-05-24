@@ -9,6 +9,9 @@
 BitPack	KEYWORD1
 BitPackExt	KEYWORD1
 BitPackDyn	KEYWORD1
+BitFlags8	KEYWORD1
+BitFlags16	KEYWORD1
+BitFlags32	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -27,6 +30,8 @@ copyTo	KEYWORD2
 copyFrom	KEYWORD2
 init	KEYWORD2
 setBuffer	KEYWORD2
+mask	KEYWORD2
+compare	KEYWORD2
 
 BP_BYTE	KEYWORD2
 BP_BIT	KEYWORD2

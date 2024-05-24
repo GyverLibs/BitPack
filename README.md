@@ -103,6 +103,46 @@ flags = flags2;
 flags.copyTo(flags2);     // копировать весь пакет
 ```
 
+### BitFlags
+```cpp
+// пакет флагов
+T flags = 0;
+
+// получить маску
+T mask(const T x);
+
+// установить биты
+void set(const T x);
+
+// очистить биты
+void clear(const T x);
+
+// прочитать
+bool read(const T x);
+
+// записать
+void write(const T x, const bool v);
+
+// сравнить маску со значением
+bool compare(const T x, const T y);
+```
+
+Ещё три пакета фиксированного количества флагов `BitFlags8`, `BitFlags16`, `BitFlags32` на 8/16/32 флагов соответственно. Они работают чуть иначе, как регистры. Можно ставить и читать несколько флагов за одно действие, что сильно повышает производительность. Для удобства можно объявить флаги как биты:
+```cpp
+#define MY_FLAG_0 bit(0)
+#define KEK_FLAG bit(1)
+#define SOME_F bit(2)
+
+BitFlags8 flags;
+flags.set(KEK_FLAG | SOME_F);       // установить два флага
+if (flags.read(KEK_FLAG | SOME_F)); // проверить два флага
+
+// операция compare берёт маску по первому аргументу и сравнивает со вторым
+// фактически смысл такой: определение ситуации, когда из указанных флагов подняты только определённые
+// здесь - из флагов KEK_FLAG и SOME_F поднят только SOME_F (KEK_FLAG опущен)
+if (flags.compare(KEK_FLAG | SOME_F, SOME_F));
+```
+
 <a id="example"></a>
 ## Пример
 Остальные примеры смотри в **examples**!
@@ -143,6 +183,7 @@ void loop() {
 - v1.1.1 - перезалив
 - v1.2 - добавлены copy методы, упрощён доступ через массив
 - v1.3 - добавлена отдельная инициализация для BitPackExt и BitPackDyn
+- v1.3.1 - добавлен copy и move конструктор для BitPackDyn. Добавлены инструменты BitFlags8, BitFlags16, BitFlags32
 
 <a id="install"></a>
 ## Установка

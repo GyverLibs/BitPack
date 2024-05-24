@@ -30,12 +30,12 @@ class BitPack {
     }
 
     // размер pack в байтах
-    uint16_t size() {
+    uint16_t size() const {
         return (flag_amount + 8 - 1) >> 3;
     }
 
     // количество флагов
-    uint16_t amount() {
+    uint16_t amount() const {
         return flag_amount;
     }
 
@@ -60,7 +60,7 @@ class BitPack {
     }
 
     // прочитать
-    bool read(uint16_t idx) {
+    bool read(uint16_t idx) const {
         if (idx < flag_amount) return BP_READ(pack, idx);
         else return 0;
     }
@@ -97,7 +97,7 @@ class BitPack {
     void operator=(bool val) {
         write(_idx, val);
     }
-    operator bool() {
+    operator bool() const {
         return read(_idx);
     }
     void operator=(BitPack& bp) {
@@ -131,12 +131,12 @@ class BitPackExt {
     }
 
     // размер pack в байтах
-    uint16_t size() {
+    uint16_t size() const {
         return (_amount + 8 - 1) >> 3;  // round up
     }
 
     // количество флагов
-    uint16_t amount() {
+    uint16_t amount() const {
         return _amount;
     }
 
@@ -161,7 +161,7 @@ class BitPackExt {
     }
 
     // прочитать
-    bool read(uint16_t idx) {
+    bool read(uint16_t idx) const {
         if (pack && idx < _amount) return BP_READ(pack, idx);
         else return 0;
     }
@@ -198,7 +198,7 @@ class BitPackExt {
     void operator=(bool val) {
         write(_idx, val);
     }
-    operator bool() {
+    operator bool() const {
         return read(_idx);
     }
     void operator=(BitPackExt& bp) {
@@ -225,6 +225,25 @@ class BitPackDyn : public BitPackExt {
         init(amount);
     }
 
+    BitPackDyn(const BitPackDyn& val) {
+        copy(val);
+    }
+
+#if __cplusplus >= 201103L
+    BitPackDyn(BitPackDyn&& rval) {
+        move(rval);
+    }
+#endif
+
+    void operator=(const BitPackDyn& val) {
+        copy(val);
+    }
+#if __cplusplus >= 201103L
+    void operator=(BitPackDyn&& rval) {
+        move(rval);
+    }
+#endif
+
     // указать количество флагов
     void init(uint16_t amount) {
         if (pack) delete[] pack;
@@ -239,4 +258,66 @@ class BitPackDyn : public BitPackExt {
     }
 
    private:
+    void invalidate() {
+        if (pack) delete[] pack;
+        _amount = 0;
+    }
+
+    void copy(const BitPackDyn& val) {
+        if (this == &val) return;
+        if (!val.pack) return invalidate();
+        memcpy(pack, val.pack, val.size());
+        _amount = val._amount;
+    }
+
+#if __cplusplus >= 201103L
+    void move(BitPackDyn& rval) {
+        if (pack) free(pack);
+        pack = rval.pack;
+        _amount = rval._amount;
+        rval.pack = nullptr;
+    }
+#endif
 };
+
+// ================= BIT FLAGS =================
+template <typename T>
+struct BitFlags {
+    // пакет флагов
+    T flags = 0;
+
+    // получить маску
+    inline T mask(const T x) const __attribute__((always_inline)) {
+        return flags & x;
+    }
+
+    // прочитать
+    inline bool read(const T x) const __attribute__((always_inline)) {
+        return flags & x;
+    }
+
+    // установить биты
+    inline void set(const T x) __attribute__((always_inline)) {
+        flags |= x;
+    }
+
+    // очистить биты
+    inline void clear(const T x) __attribute__((always_inline)) {
+        flags &= ~x;
+    }
+
+    // записать
+    inline void write(const T x, const bool v) __attribute__((always_inline)) {
+        if (v) set(x);
+        else clear(x);
+    }
+
+    // сравнить маску со значением
+    inline bool compare(const T x, const T y) const __attribute__((always_inline)) {
+        return (flags & x) == y;
+    }
+};
+
+struct BitFlags8 : public BitFlags<uint8_t> {};
+struct BitFlags16 : public BitFlags<uint16_t> {};
+struct BitFlags32 : public BitFlags<uint32_t> {};
