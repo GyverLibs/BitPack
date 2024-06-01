@@ -228,56 +228,53 @@ class BitPackDyn : public BitPackExt {
     BitPackDyn(const BitPackDyn& val) {
         copy(val);
     }
-
-#if __cplusplus >= 201103L
-    BitPackDyn(BitPackDyn&& rval) {
-        move(rval);
-    }
-#endif
-
     void operator=(const BitPackDyn& val) {
         copy(val);
     }
+
 #if __cplusplus >= 201103L
-    void operator=(BitPackDyn&& rval) {
+    BitPackDyn(BitPackDyn&& rval) noexcept {
+        move(rval);
+    }
+    void operator=(BitPackDyn&& rval) noexcept {
         move(rval);
     }
 #endif
 
     // указать количество флагов
     void init(uint16_t amount) {
-        if (pack) delete[] pack;
-        _amount = amount;
+        delete[] pack;
+        _amount = amount;   // need for size()
         pack = new uint8_t[size()];
         if (!pack) _amount = 0;
         clearAll();
     }
 
     ~BitPackDyn() {
-        if (pack) delete[] pack;
+        delete[] pack;
     }
 
-   private:
-    void invalidate() {
-        if (pack) delete[] pack;
+    // удалить буфер
+    void reset() {
+        delete[] pack;
         _amount = 0;
     }
 
+    // копировать из
     void copy(const BitPackDyn& val) {
-        if (this == &val) return;
-        if (!val.pack) return invalidate();
+        if (this == &val || pack == val.pack) return;
+        if (!val.pack) return reset();
         memcpy(pack, val.pack, val.size());
         _amount = val._amount;
     }
 
-#if __cplusplus >= 201103L
-    void move(BitPackDyn& rval) {
-        if (pack) free(pack);
+    // переместить из
+    void move(BitPackDyn& rval) noexcept {
+        delete[] pack;
         pack = rval.pack;
         _amount = rval._amount;
         rval.pack = nullptr;
     }
-#endif
 };
 
 // ================= BIT FLAGS =================
