@@ -244,7 +244,7 @@ class BitPackDyn : public BitPackExt {
     // указать количество флагов
     void init(uint16_t amount) {
         delete[] pack;
-        _amount = amount;   // need for size()
+        _amount = amount;  // need for size()
         pack = new uint8_t[size()];
         if (!pack) _amount = 0;
         clearAll();
@@ -257,13 +257,17 @@ class BitPackDyn : public BitPackExt {
     // удалить буфер
     void reset() {
         delete[] pack;
+        pack = nullptr;
         _amount = 0;
     }
 
     // копировать из
     void copy(const BitPackDyn& val) {
         if (this == &val || pack == val.pack) return;
-        if (!val.pack) return reset();
+        if (!val.pack) {
+            reset();
+            return;
+        }
         memcpy(pack, val.pack, val.size());
         _amount = val._amount;
     }
