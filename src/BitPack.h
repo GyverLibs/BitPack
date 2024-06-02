@@ -233,6 +233,9 @@ class BitPackDyn : public BitPackExt {
     }
 
 #if __cplusplus >= 201103L
+    BitPackDyn(BitPackExt&&) = delete;
+    BitPackDyn& operator=(BitPackExt&&) = delete;
+
     BitPackDyn(BitPackDyn&& rval) noexcept {
         move(rval);
     }
@@ -241,6 +244,10 @@ class BitPackDyn : public BitPackExt {
     }
 #endif
 
+    ~BitPackDyn() {
+        delete[] pack;
+    }
+
     // указать количество флагов
     void init(uint16_t amount) {
         delete[] pack;
@@ -248,10 +255,6 @@ class BitPackDyn : public BitPackExt {
         pack = new uint8_t[size()];
         if (!pack) _amount = 0;
         clearAll();
-    }
-
-    ~BitPackDyn() {
-        delete[] pack;
     }
 
     // удалить буфер
