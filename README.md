@@ -108,20 +108,26 @@ flags.copyTo(flags2);     // копировать весь пакет
 // пакет флагов
 T flags = 0;
 
+// прочитать бит
+bool read(const T x);
+
+// установить биты маской
+void set(const T x);
+
+// очистить биты маской
+void clear(const T x);
+
+// записать бит
+void write(const T x, const bool v);
+
 // получить маску
 T mask(const T x);
 
-// установить биты
-void set(const T x);
+// стоят все биты в маске
+bool isSet(const T x);
 
-// очистить биты
-void clear(const T x);
-
-// прочитать
-bool read(const T x);
-
-// записать
-void write(const T x, const bool v);
+// очищены все биты в маске
+bool isClear(const T x);
 
 // сравнить маску со значением
 bool compare(const T x, const T y);
