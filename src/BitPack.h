@@ -10,6 +10,7 @@
 
 #pragma once
 #include <Arduino.h>
+#include "BitFlags.h"
 
 #define BP_BYTE(pack, idx) pack[(idx) >> 3]
 #define BP_BIT(pack, idx) ((idx) & 0b111)
@@ -283,54 +284,3 @@ class BitPackDyn : public BitPackExt {
         rval.pack = nullptr;
     }
 };
-
-// ================= BIT FLAGS =================
-template <typename T>
-struct BitFlags {
-    // пакет флагов
-    T flags = 0;
-
-    // прочитать бит
-    inline bool read(const T x) const __attribute__((always_inline)) {
-        return flags & x;
-    }
-
-    // установить биты маской
-    inline void set(const T x) __attribute__((always_inline)) {
-        flags |= x;
-    }
-
-    // очистить биты маской
-    inline void clear(const T x) __attribute__((always_inline)) {
-        flags &= ~x;
-    }
-
-    // записать бит
-    inline void write(const T x, const bool v) __attribute__((always_inline)) {
-        v ? set(x) : clear(x);
-    }
-
-    // получить маску
-    inline T mask(const T x) const __attribute__((always_inline)) {
-        return flags & x;
-    }
-
-    // стоят все биты в маске
-    inline bool isSet(const T x) const __attribute__((always_inline)) {
-        return (flags & x) == x;
-    }
-
-    // очищены все биты в маске
-    inline bool isClear(const T x) const __attribute__((always_inline)) {
-        return !(flags & x);
-    }
-
-    // сравнить маску со значением
-    inline bool compare(const T x, const T y) const __attribute__((always_inline)) {
-        return (flags & x) == y;
-    }
-};
-
-struct BitFlags8 : public BitFlags<uint8_t> {};
-struct BitFlags16 : public BitFlags<uint16_t> {};
-struct BitFlags32 : public BitFlags<uint32_t> {};
