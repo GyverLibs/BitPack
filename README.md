@@ -106,31 +106,31 @@ flags.copyTo(flags2);     // копировать весь пакет
 ### BitFlags
 ```cpp
 // пакет флагов
-T flags = 0;
-
-// прочитать бит
-bool read(const T x);
+T flags{};
 
 // установить биты маской
-void set(const T x);
+void set(const T mask);
 
 // очистить биты маской
-void clear(const T x);
+void clear(const T mask);
 
-// записать бит
-void write(const T x, const bool v);
+// записать биты маской
+void write(const T mask, const bool val);
 
-// получить маску
-T mask(const T x);
+// записать биты по маске
+void writeBits(const T mask, const T bits);
+
+// прочитать маской
+T read(const T mask);
 
 // стоят все биты в маске
-bool isSet(const T x);
+bool isSet(const T mask);
 
 // очищены все биты в маске
-bool isClear(const T x);
+bool isClear(const T mask);
 
 // сравнить маску со значением
-bool compare(const T x, const T y);
+bool compare(const T mask, const T val);
 ```
 
 Ещё три пакета фиксированного количества флагов `BitFlags8`, `BitFlags16`, `BitFlags32` на 8/16/32 флагов соответственно. Они работают чуть иначе, как регистры. Можно ставить и читать несколько флагов за одно действие, что сильно повышает производительность. Для удобства можно объявить флаги как биты:

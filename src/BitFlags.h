@@ -5,54 +5,54 @@
 template <typename T>
 struct BitFlags {
     // пакет флагов
-    T flags = 0;
-
-    // прочитать бит
-    template <typename T1>
-    inline bool read(const T1 x) const {
-        return flags & (T)x;
-    }
+    T flags{};
 
     // установить биты маской
     template <typename T1>
-    inline void set(const T1 x) {
-        flags |= (T)x;
+    inline void set(const T1 mask) {
+        flags |= T(mask);
     }
 
     // очистить биты маской
     template <typename T1>
-    inline void clear(const T1 x) {
-        flags &= ~((T)x);
+    inline void clear(const T1 mask) {
+        flags &= ~T(mask);
     }
 
-    // записать бит
+    // записать биты маской
     template <typename T1>
-    inline void write(const T1 x, const bool v) {
-        v ? set(x) : clear(x);
+    inline void write(const T1 mask, const bool val) {
+        val ? set(mask) : clear(mask);
     }
 
-    // получить маску
+    // записать биты по маске
+    template <typename T1, typename T2>
+    inline void writeBits(const T1 mask, const T2 bits) {
+        flags = (flags & ~T(mask)) | (T(bits) & T(mask));
+    }
+
+    // прочитать маской
     template <typename T1>
-    inline T mask(const T1 x) const {
-        return flags & (T)x;
+    inline T read(const T1 mask) const {
+        return flags & T(mask);
     }
 
     // стоят все биты в маске
     template <typename T1>
-    inline bool isSet(const T1 x) const {
-        return (flags & (T)x) == (T)x;
+    inline bool isSet(const T1 mask) const {
+        return compare(mask, mask);
     }
 
     // очищены все биты в маске
     template <typename T1>
-    inline bool isClear(const T1 x) const {
-        return !(flags & (T)x);
+    inline bool isClear(const T1 mask) const {
+        return read(mask) == 0;
     }
 
     // сравнить маску со значением
     template <typename T1, typename T2>
-    inline bool compare(const T1 x, const T2 y) const {
-        return (flags & (T)x) == (T)y;
+    inline bool compare(const T1 mask, const T2 val) const {
+        return read(mask) == T(val);
     }
 };
 
