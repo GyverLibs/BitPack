@@ -60,7 +60,7 @@ BP_TOGGLE(pack, idx)
 BP_WRITE(pack, idx)
 
 // настройки (до подключения библиотеки)
-#define BP_NO_ARRAY   // убрать доступ через [] - экономит 2 байта RAM
+#define BP_NO_ARRAY   // убрать доступ через [] - уменьшает размер кода
 ```
 
 #### BitPackExt
@@ -96,11 +96,9 @@ bool f = flags[0];
 BitPack<10> flags2;
 flags[0] = flags2[0];
 
-// примечание:
-// такое приравнивание некорректно! Используй copyTo/copyFrom
-flags = flags2;
+flags = flags2;             // копировать весь статический пакет
 
-flags.copyTo(flags2);     // копировать весь пакет
+flags.copyTo(flags2);       // копировать весь пакет явно
 ```
 
 ### BitFlags

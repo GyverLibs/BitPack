@@ -62,7 +62,7 @@ BP_TOGGLE(pack, idx)
 BP_WRITE(pack, idx)
 
 // settings (before the library is connected)
-#define BP_NO_ARRAY   // Remove access via [] - saves 2 bytes of RAM
+#define BP_NO_ARRAY   // Remove [] access to reduce code size
 ```
 
 #### BitPackExt
@@ -98,11 +98,9 @@ bool f = flags[0];
 BitPack<10> flags2;
 flags[0] = flags2[0];
 
-// note:
-// This equation is incorrect! Use copyTo/copyFrom
-flags = flags2;
+flags = flags2;             // copy the whole static pack
 
-flags.copyTo(flags2);     // copy
+flags.copyTo(flags2);       // copy the whole pack explicitly
 ```
 
 ### BitFlags
