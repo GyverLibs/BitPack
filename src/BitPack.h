@@ -10,6 +10,7 @@
 
 #pragma once
 #include <Arduino.h>
+
 #include "BitFlags.h"
 
 #define BP_BYTE(pack, idx) pack[(idx) >> 3]
@@ -58,12 +59,17 @@ class BitPackBase {
 
     // установить все
     void setAll() {
-        if (_data()) memset(_data(), 255, size());
+        writeAll(1);
     }
 
     // очистить все
     void clearAll() {
-        if (_data()) memset(_data(), 0, size());
+        writeAll(0);
+    }
+
+    // записать все
+    void writeAll(bool state) {
+        if (_data()) memset(_data(), state ? 0xff : 0, size());
     }
 
     // копировать в

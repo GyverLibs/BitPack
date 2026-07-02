@@ -44,6 +44,7 @@ void write(uint16_t num, bool state);    // записать
 bool read(uint16_t num);                 // прочитать
 void setAll();                          // установить все
 void clearAll();                        // сбросить все
+void writeAll(bool state);              // записать все
 bool copyTo(любой пак);                 // копировать в    
 bool copyFrom(любой пак);               // копировать из
 
